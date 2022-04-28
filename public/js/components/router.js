@@ -1,5 +1,7 @@
 const router = {};
 
+router.domain = 'localhost';
+
 router.routes = {};
 
 router.notFoundRoute = null;
@@ -22,7 +24,21 @@ router.addRoute = (link, handler) => {
 }
 
 router.init = () => {
-    console.log('inicijuojamas routeris...');
+    const allLinks = document.querySelectorAll('a');
+
+    if (allLinks.length === 0) {
+        return;
+    }
+
+    for (const link of allLinks) {
+        link.addEventListener('click', (e) => {
+            if (link.hostname === router.domain) {
+                e.preventDefault();
+                const { pathname } = link;
+                history.pushState({ pathname }, '', pathname);
+            }
+        })
+    }
 }
 
 export { router }
